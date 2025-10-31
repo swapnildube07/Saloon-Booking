@@ -1,0 +1,54 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: USER-MICROSERVICE
+          uri: lb://USER-MICROSERVICE
+          predicates:
+            - Path=/api/user/**
+
+
+        - id: BOOKING-SERVICE
+          uri: lb://BOOKING-SERVICE
+          predicates:
+            - Path=/api/bookings/**
+
+        - id: PAYMENT-SERVICE
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/payments/**
+
+        - id: SALON-SERVICE
+          uri: lb://SALON-SERVICE
+          predicates:
+            - Path=/api/saloon/**
+
+        - id: CATEGORY-SERVICE
+          uri: lb://CATEGORY-SERVICE
+          predicates:
+            - Path=/api/categories/**
+            - Path=/api/categories/salon-owner/**
+
+        - id: SERVICE-OFFERING
+          uri: lb://SERVICE-OFFERING
+          predicates:
+            - Path=/api/service-offering/**
+            - Path=/api/service-offering/saloon-owner/**
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8081/eureka/
+  instance:
+    prefer-ip-address: true
